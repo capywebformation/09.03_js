@@ -4,22 +4,14 @@ const server = express();
 const hostname = '0.0.0.0';
 const port = 3000;
 
-server.get('/', (req, res) => {
-  res.type('html');
-  res.status(200);
-  res.end("Home");
-})
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://mongo/apinodeipssi');
 
-server.get('/posts', (req, res) => {
-  res.type('html');
-  res.status(200);
-  res.end("Liste des articles");
-})
+const bodyParser = require('body-parser');
+server.use(bodyParser.urlencoded());
+server.use(bodyParser.json());
 
-server.post('/posts', (req, res) => {
-  res.type('html');
-  res.status(201);
-  res.end("Article crée");
-})
+const postRoute = require('./api/routes/postRoute');
+postRoute(server);
 
 server.listen(port, hostname);
