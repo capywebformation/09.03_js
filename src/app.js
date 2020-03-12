@@ -11,6 +11,9 @@ const bodyParser = require('body-parser');
 server.use(bodyParser.urlencoded());
 server.use(bodyParser.json());
 
+const cors = require('cors');
+server.use(cors());
+
 const postRoute = require('./api/routes/postRoute');
 postRoute(server);
 
