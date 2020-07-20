@@ -8,7 +8,7 @@ let postSchema = new Schema({
   },
   content: {
     type: String,
-    required: "Le contenu est requis"
+    // required: "Le contenu est requis"
   },
   created_at: {
     type: Date,

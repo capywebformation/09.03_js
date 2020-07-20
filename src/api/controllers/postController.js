@@ -1,33 +1,74 @@
 const Post = require('../models/postModel');
+const loripsum = require('../providers/loripsumApiProvider');
 
 exports.list_all_post = (req, res) => {
-  Post.find({}, (error, posts) => {
-    if(error){
-      res.status(500);
-      console.log(error);
-      res.json({message: "Erreur serveur."})
-    }
-    else{
-      res.status(200);
-      res.json(posts)
-    }
+  // Post.find({}, (error, posts) => {
+  //   if(error){
+  //     res.status(500);
+  //     console.log(error);
+  //     res.json({message: "Erreur serveur."})
+  //   }
+  //   else{
+  //     res.status(200);
+  //     res.json(posts)
+  //   }
+  // })
+
+  Post.find({})
+  .then(posts => {
+    res.status(200);
+    res.json(posts)
+  })
+  .catch(error => {
+    res.status(500);
+    console.log(error);
+    res.json({message: "Erreur serveur."})
   })
 }
 
 exports.create_a_post = (req, res) => {
   let new_post = new Post(req.body);
 
-  new_post.save((error, post) => {
-    if(error){
+// Function to save a post
+  function savePost(resData, postData){
+    postData.save((error, post) => {
+      if(error){
+        resData.status(500);
+        console.log(error);
+        resData.json({message: "Erreur serveur."})
+      }
+      else{
+        resData.status(201);
+        resData.json(post);
+      }
+    })
+  }
+
+// If there is no content
+  if(!new_post.content){
+
+    let getRandomText = loripsum.getRandomText()
+
+    getRandomText
+    .then(response => {
+      new_post.content = response;
+
+      savePost(res, new_post);
+
+    })
+    .catch(error => {
       res.status(500);
       console.log(error);
       res.json({message: "Erreur serveur."})
-    }
-    else{
-      res.status(201);
-      res.json(post);
-    }
-  })
+    })
+
+  }
+  // If there is a content
+  else{
+    savePost(res, new_post);
+  }
+
+
 }
 
 exports.get_a_post = (req, res) => {
