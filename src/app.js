@@ -23,4 +23,9 @@ commentRoute(server);
 const userRoute = require('./api/routes/userRoute');
 userRoute(server);
 
-server.listen(port, hostname);
+if(!module.parent){
+  server.listen(port, hostname);
+}
+else {
+  module.exports = server
+}

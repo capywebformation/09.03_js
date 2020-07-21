@@ -1,5 +1,6 @@
 const Post = require('../models/postModel');
 const loripsum = require('../providers/loripsumApiProvider');
+const dateFormat = require('../lib/dateFormat');
 
 exports.list_all_post = (req, res) => {
   // Post.find({}, (error, posts) => {
@@ -84,6 +85,8 @@ exports.get_a_post = (req, res) => {
     }
     else{
       res.status(200);
+      post = post.toObject();
+      post.created_at = dateFormat.plainText(post.created_at);
       res.json(post)
     }
   })

@@ -7,7 +7,7 @@ module.exports = (server) => {
   .post(jwtMiddleware.verify_token, postController.create_a_post);
 
  server.route('/posts/:post_id') // req.params.post_id
- .all(jwtMiddleware.verify_token)
+ // .all(jwtMiddleware.verify_token)
  .get(postController.get_a_post)
  .put(postController.update_a_post)
  .delete(postController.delete_a_post);
